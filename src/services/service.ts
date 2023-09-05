@@ -22,16 +22,23 @@ authInstance.interceptors.response.use(
         return response;
     },
     function (error) {
-        return Promise.reject(error.response?.data?.message);
+        return Promise.reject(error.response?.data);
     }
 )
 
-export const login = async (payload): Promise<AxiosPromise> => {
+type resultType = {
+    data: {
+        email: string;
+        accessToken: string;
+        refreshToken: string;
+    },
+    success: Boolean,
+    message: string
+}
+export const login = async (payload): Promise<resultType> => {
     try {
-        return await authInstance.post("login", payload)
+        return (await authInstance.post("login", payload)).data
     } catch (error) {
-        // error
-        // console.log("fn wrrr-->", error.)
-        // throw new Error(error ?)
+        return error;
     }
 }
