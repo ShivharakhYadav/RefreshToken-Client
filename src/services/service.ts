@@ -1,11 +1,14 @@
+import { getData } from './index'
 import axios, { AxiosPromise, AxiosError } from 'axios'
-const baseUrl = process.env.REACT_APP_BASE_URL
+const baseUrl = "http://localhost:3002";
+// process.env.REACT_APP_BASE_URL
 
 const authInstance = axios.create({
-    baseURL: baseUrl,
+    baseURL: baseUrl + "/auth",
     headers: {
-        "Content-Type": "application/json"
-    }
+        "Content-Type": "application/json",
+    },
+    withCredentials: true
 })
 
 authInstance.interceptors.request.use(
@@ -37,6 +40,7 @@ type resultType = {
 }
 export const login = async (payload): Promise<resultType> => {
     try {
+        console.log("login called", getData())
         return (await authInstance.post("login", payload)).data
     } catch (error) {
         return error;

@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { login } from './services/service';
 import { showMessage } from './helper';
 import { useNavigate } from 'react-router-dom';
@@ -7,10 +7,15 @@ const Login = () => {
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors }, } = useForm();
     const [formValues, setFormValues] = useState({
-        email: "",
-        password: ""
+        email: "test@gmail.com",
+        password: "1234"
     })
 
+    useEffect(() => {
+        (async () => {
+            const loginData = await login(formValues);
+        })();
+    }, [])
     const onFormSubmit = async () => {
         try {
             console.log("cakked")
@@ -20,7 +25,7 @@ const Login = () => {
             if (loginData.success) {
                 localStorage.setItem("accessToken", loginData.data.accessToken);
                 sessionStorage.setItem("refreshToken", loginData.data.accessToken);
-                navigate("/dashboard")
+                // navigate("/dashboard")
             }
             else {
                 console.log("called")
